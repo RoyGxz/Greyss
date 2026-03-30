@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi mejor amiga 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#f9c6d0;--pink-deep:#e8849a;--pink-vivid:#ff6b9d;
+  --purple:#d5c0f0;--purple-deep:#9b7fd4;--purple-vivid:#b44fe8;
+  --blue:#b8d8f8;--blue-deep:#6aaee8;
+  --yellow:#ffe066;--orange:#ffb347;--green:#7dd87a;
+  --text:#5a3d5c;--text-soft:#8b6d8e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg,#fce4ec 0%,#e8d5f5 30%,#d4eaf7 60%,#fff0c8 100%);
+  background-size:400% 400%;
+  animation:bgShift 14s ease infinite;
+  min-height:100vh;color:var(--text);overflow-x:hidden;
+  cursor:none;
+}
+@keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* ── Cursor personalizado ── */
+#cursor{
+  position:fixed;width:28px;height:28px;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .1s ease;
+  font-size:22px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+}
+#cursor-trail{
+  position:fixed;width:10px;height:10px;
+  border-radius:50%;pointer-events:none;z-index:9998;
+  background:rgba(232,132,154,.45);
+  transform:translate(-50%,-50%);
+  transition:all .18s ease;
+}
+
+/* ══════════════════════════════════════
+   PANTALLA DE BIENVENIDA
+══════════════════════════════════════ */
+#welcomeScreen{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#fce4ec,#e8d5f5,#d4eaf7,#fff0c8);
+  background-size:400% 400%;
+  animation:bgShift 8s ease infinite;
+  padding:24px;
+}
+.welcome-box{
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(20px);
+  border:2px solid rgba(255,255,255,.9);
+  border-radius:32px;
+  padding:52px 40px;
+  max-width:440px;width:100%;
+  text-align:center;
+  box-shadow:0 20px 80px rgba(155,127,212,.2);
+  animation:popIn .8s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+
+.welcome-tulips{display:flex;justify-content:center;gap:6px;margin-bottom:22px}
+.w-tulip{animation:tulipGrow .6s ease both}
+.w-tulip:nth-child(1){animation-delay:.1s}
+.w-tulip:nth-child(2){animation-delay:.25s}
+.w-tulip:nth-child(3){animation-delay:.4s}
+.w-tulip:nth-child(4){animation-delay:.55s}
+.w-tulip:nth-child(5){animation-delay:.7s}
+@keyframes tulipGrow{from{opacity:0;transform:scaleY(0) translateY(20px)}to{opacity:1;transform:scaleY(1) translateY(0)}}
+
+.welcome-box h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,6vw,2.4rem);
+  font-weight:700;line-height:1.2;
+  color:var(--text);margin-bottom:10px;
+}
+.welcome-box h1 em{font-style:italic;color:var(--pink-deep)}
+.welcome-box p{font-size:.95rem;color:var(--text-soft);margin-bottom:28px;line-height:1.6}
+
+.welcome-input-wrap{position:relative;margin-bottom:20px}
+.welcome-input{
+  width:100%;padding:14px 20px;
+  border:2px solid var(--purple);
+  border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;
+  background:rgba(255,255,255,.8);color:var(--text);
+  outline:none;text-align:center;
+  transition:border-color .25s,box-shadow .25s;
+}
+.welcome-input:focus{border-color:var(--pink-vivid);box-shadow:0 0 0 4px rgba(255,107,157,.15)}
+.welcome-input::placeholder{color:var(--text-soft);font-weight:400}
+
+.welcome-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--pink-vivid),var(--purple-vivid));
+  color:#fff;border:none;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  cursor:pointer;letter-spacing:.3px;
+  transition:transform .25s,box-shadow .25s;
+  box-shadow:0 6px 26px rgba(180,79,232,.35);
+}
+.welcome-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 34px rgba(180,79,232,.5)}
+.welcome-btn:active{transform:scale(.97)}
+
+/* Pétalo de carga */
+.petal-loader{
+  display:flex;justify-content:center;gap:6px;margin-top:18px;
+}
+.petal{width:10px;height:10px;border-radius:50%;opacity:.4;animation:petalPulse 1.2s ease-in-out infinite}
+.petal:nth-child(1){background:var(--pink-vivid);animation-delay:0s}
+.petal:nth-child(2){background:var(--purple-vivid);animation-delay:.2s}
+.petal:nth-child(3){background:var(--blue-deep);animation-delay:.4s}
+@keyframes petalPulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
+
+/* Pantalla de salida con pétalos */
+#petalCanvas{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
+
+/* ── Partículas ── */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.heart-particle{position:absolute;opacity:0;animation:floatHeart linear infinite;user-select:none}
+@keyframes floatHeart{
+  0%{opacity:0;transform:translateY(0) scale(.6) rotate(-15deg)}
+  10%{opacity:.8}90%{opacity:.3}
+  100%{opacity:0;transform:translateY(-100vh) scale(1.1) rotate(15deg)}
+}
+
+/* Tulipanes fondo */
+.tulip-float{position:fixed;pointer-events:none;z-index:0;animation:tulipDrift ease-in-out infinite;opacity:.22}
+@keyframes tulipDrift{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg)}}
+
+/* ── Layout ── */
+#mainContent{display:none}
+.wrapper{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 18px 100px}
+
+/* HERO */
+.hero{text-align:center;padding:70px 20px 50px;animation:fadeDown 1.2s ease both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{
+  display:inline-block;background:rgba(255,255,255,.55);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.8);border-radius:50px;
+  padding:6px 20px;font-size:.78rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--purple-deep);margin-bottom:22px;
+}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.1rem,8vw,3.6rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--pink-deep)}
+.hero h1 .name-highlight{
+  color:var(--purple-vivid);font-style:italic;
+  text-shadow:0 2px 20px rgba(180,79,232,.25);
+}
+.hero-sub{font-size:1rem;font-weight:300;color:var(--text-soft);line-height:1.75;max-width:460px;margin:0 auto 30px}
+.center-tulip{display:flex;justify-content:center;margin:24px 0 8px;animation:floatCenter 4s ease-in-out infinite}
+@keyframes floatCenter{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* CARTA */
+.card-letter{
+  background:rgba(255,255,255,.62);backdrop-filter:blur(14px);
+  border:1.5px solid rgba(255,255,255,.85);border-radius:28px;
+  padding:38px 34px;margin-bottom:40px;
+  box-shadow:0 8px 40px rgba(155,127,212,.13);
+  animation:fadeUp 1.4s .3s ease both;position:relative;overflow:hidden;
+}
+.card-letter::before{
+  content:'❝';position:absolute;top:10px;left:20px;
+  font-size:5rem;color:var(--purple);
+  font-family:'Playfair Display',serif;line-height:1;opacity:.45;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.card-letter p{font-size:1.05rem;line-height:1.85;color:var(--text);margin-bottom:14px;position:relative;z-index:1}
+.card-letter .firma{text-align:right;font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--pink-deep);margin-top:8px}
+
+/* CONTADOR */
+.counter-card{
+  background:rgba(255,255,255,.55);backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,255,255,.8);border-radius:24px;
+  padding:28px 24px;margin-bottom:40px;text-align:center;
+  box-shadow:0 6px 30px rgba(155,127,212,.12);
+}
+.counter-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:18px}
+.counter-boxes{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.counter-box{
+  background:linear-gradient(135deg,rgba(249,198,208,.5),rgba(213,192,240,.5));
+  border:1.5px solid rgba(255,255,255,.8);border-radius:16px;
+  padding:14px 18px;min-width:72px;text-align:center;
+}
+.counter-box .num{font-size:1.8rem;font-weight:800;color:var(--text);line-height:1;display:block}
+.counter-box .lbl{font-size:.7rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:1px;margin-top:4px;display:block}
+.counter-date-wrap{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.counter-date-input{
+  padding:10px 16px;border:2px solid var(--purple);border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:600;
+  background:rgba(255,255,255,.7);color:var(--text);outline:none;
+  transition:border-color .25s;
+}
+.counter-date-input:focus{border-color:var(--pink-vivid)}
+.counter-btn{
+  padding:10px 20px;
+  background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));
+  color:#fff;border:none;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 14px rgba(155,127,212,.3);
+}
+.counter-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(155,127,212,.4)}
+
+/* SECCIÓN TÍTULOS */
+.section-title{
+  font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;
+  text-align:center;color:var(--text);margin-bottom:8px;
+  opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;
+}
+.section-title.visible{opacity:1;transform:translateY(0)}
+.section-sub{text-align:center;font-size:.9rem;color:var(--text-soft);margin-bottom:26px;opacity:0;transition:opacity .7s .1s ease}
+.section-sub.visible{opacity:1}
+
+/* ══════════════════════
+   JUEGO DE MEMORIA
+══════════════════════ */
+.memory-section{margin-bottom:52px}
+.memory-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;margin-bottom:16px;
+}
+@media(max-width:400px){.memory-grid{grid-template-columns:repeat(3,1fr);gap:8px}}
+.mem-card{
+  aspect-ratio:1;border-radius:14px;cursor:pointer;
+  position:relative;transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.4,0,.2,1);
+}
+.mem-card.flipped,.mem-card.matched{transform:rotateY(180deg)}
+.mem-card.matched .mem-back{
+  background:linear-gradient(135deg,rgba(125,216,122,.3),rgba(106,174,232,.3));
+  border-color:rgba(125,216,122,.6);
+}
+.mem-front,.mem-back{
+  position:absolute;inset:0;border-radius:14px;
+  backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid rgba(255,255,255,.8);
+}
+.mem-front{
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  font-size:1.5rem;
+}
+.mem-back{
+  background:rgba(255,255,255,.6);backdrop-filter:blur(8px);
+  font-size:1.6rem;transform:rotateY(180deg);
+}
+.mem-front::after{content:'🌷';opacity:.4;font-size:1.2rem}
+.memory-stats{
+  display:flex;justify-content:center;gap:20px;
+  font-size:.88rem;font-weight:700;color:var(--text-soft);margin-bottom:14px;
+}
+.memory-stats span{background:rgba(255,255,255,.5);padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,.8)}
+.memory-win{
+  display:none;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);
+  border:2px solid rgba(255,255,255,.9);border-radius:22px;padding:24px;
+  text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow:0 10px 40px rgba(155,127,212,.15);
+}
+.memory-win.show{display:block}
+.memory-win p{font-size:.95rem;color:var(--text-soft);line-height:1.6}
+.memory-win h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--text);margin:8px 0}
+
+/* ══════════════════════
+   PUZZLE
+══════════════════════ */
+.puzzle-section{margin-bottom:52px}
+.upload-zone{
+  border:2.5px dashed var(--purple-deep);border-radius:22px;
+  padding:36px 20px;text-align:center;cursor:pointer;
+  background:rgba(255,255,255,.4);backdrop-filter:blur(8px);
+  transition:background .3s,border-color .3s,transform .2s;margin-bottom:22px;position:relative;
+}
+.upload-zone:hover{background:rgba(255,255,255,.65);border-color:var(--pink-vivid);transform:scale(1.01)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.8rem;margin-bottom:10px;display:block;animation:bounce 2.5s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.upload-zone p{color:var(--purple-deep);font-weight:700;font-size:1rem;margin-bottom:4px}
+.upload-zone small{color:var(--text-soft);font-size:.82rem}
+.puzzle-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px}
+.ctrl-btn{
+  background:rgba(255,255,255,.55);backdrop-filter:blur(6px);
+  border:1.5px solid rgba(255,255,255,.8);border-radius:50px;
+  padding:9px 20px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;
+  cursor:pointer;color:var(--text);transition:transform .2s,background .2s,box-shadow .2s;
+  box-shadow:0 3px 12px rgba(155,127,212,.15);
+}
+.ctrl-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(155,127,212,.25)}
+.ctrl-btn.active{background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));color:#fff;border-color:transparent}
+.puzzle-wrapper{
+  position:relative;border-radius:24px;overflow:hidden;
+  box-shadow:0 12px 50px rgba(155,127,212,.22);
+  background:rgba(255,255,255,.3);backdrop-filter:blur(8px);
+  border:2px solid rgba(255,255,255,.7);touch-action:none;
+}
+#puzzleCanvas{display:block;width:100%;cursor:grab;border-radius:22px}
+#puzzleCanvas:active{cursor:grabbing}
+.puzzle-solved{
+  display:none;background:rgba(255,255,255,.75);backdrop-filter:blur(18px);
+  border:2px solid rgba(255,255,255,.9);border-radius:24px;padding:30px 24px;
+  text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  margin-top:18px;box-shadow:0 12px 50px rgba(155,127,212,.18);
+}
+.puzzle-solved.show{display:block}
+.puzzle-solved .big-emoji{font-size:3.2rem;display:block;margin-bottom:10px}
+.puzzle-solved h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:8px}
+.puzzle-solved p{font-size:.95rem;color:var(--text-soft);line-height:1.7}
+.puzzle-preview-wrap{
+  display:none;margin-bottom:16px;align-items:center;gap:12px;
+  background:rgba(255,255,255,.4);backdrop-filter:blur(6px);
+  border-radius:16px;padding:12px 16px;border:1.5px solid rgba(255,255,255,.75);
+}
+.puzzle-preview-wrap.show{display:flex}
+.puzzle-preview-wrap img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--purple)}
+.puzzle-preview-wrap span{font-size:.87rem;color:var(--text-soft);flex:1}
+.puzzle-progress{display:none;height:8px;background:rgba(255,255,255,.5);border-radius:50px;margin-bottom:14px;overflow:hidden}
+.puzzle-progress.show{display:block}
+.puzzle-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--pink-vivid),var(--purple-vivid),var(--blue-deep));border-radius:50px;transition:width .4s ease}
+.puzzle-tulip-row{display:flex;justify-content:center;gap:8px;margin-bottom:18px}
+
+/* FRASES */
+.phrases-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:48px}
+@media(max-width:480px){.phrases-grid{grid-template-columns:1fr}}
+.phrase-card{
+  background:rgba(255,255,255,.5);backdrop-filter:blur(10px);
+  border:1.5px solid rgba(255,255,255,.8);border-radius:22px;padding:24px 20px;cursor:pointer;
+  transition:transform .3s ease,box-shadow .3s ease,background .3s ease;
+  opacity:0;transform:translateY(30px);position:relative;overflow:hidden;
+}
+.phrase-card.visible{opacity:1;transform:translateY(0)}
+.phrase-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 16px 40px rgba(155,127,212,.22);background:rgba(255,255,255,.75)}
+.phrase-card .emoji{font-size:2rem;margin-bottom:10px;display:block;animation:bounce 2s ease-in-out infinite}
+.phrase-card:nth-child(2) .emoji{animation-delay:.3s}
+.phrase-card:nth-child(3) .emoji{animation-delay:.6s}
+.phrase-card:nth-child(4) .emoji{animation-delay:.9s}
+.phrase-card p{font-size:.92rem;line-height:1.65;color:var(--text-soft)}
+.phrase-card .label{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:8px}
+.phrase-card:nth-child(1){border-color:rgba(249,198,208,.7)}
+.phrase-card:nth-child(2){border-color:rgba(213,192,240,.7)}
+.phrase-card:nth-child(3){border-color:rgba(184,216,248,.7)}
+.phrase-card:nth-child(4){border-color:rgba(255,224,102,.5)}
+
+/* SORPRESA */
+.surprise-section{text-align:center;margin-bottom:52px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.surprise-section.visible{opacity:1;transform:translateY(0)}
+.btn-surprise{
+  background:linear-gradient(135deg,var(--pink-vivid),var(--purple-vivid));
+  color:#fff;border:none;border-radius:50px;padding:16px 40px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;
+  transition:transform .25s ease,box-shadow .25s ease;
+  box-shadow:0 6px 26px rgba(180,79,232,.38);position:relative;overflow:hidden;
+}
+.btn-surprise:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 12px 38px rgba(180,79,232,.5)}
+.btn-surprise:active{transform:scale(.97)}
+.surprise-msg{
+  display:none;background:rgba(255,255,255,.65);backdrop-filter:blur(16px);
+  border:1.5px solid rgba(255,255,255,.9);border-radius:24px;padding:32px 28px;
+  margin-top:28px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow:0 12px 50px rgba(155,127,212,.15);
+}
+.surprise-msg.show{display:block}
+.surprise-msg .big-emoji{font-size:3.5rem;margin-bottom:12px;display:block}
+.surprise-msg h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:10px}
+.surprise-msg p{font-size:.96rem;color:var(--text-soft);line-height:1.7}
+
+/* Footer */
+.footer{text-align:center;padding:20px;font-size:.83rem;color:var(--text-soft);opacity:0;transition:opacity .8s ease}
+.footer.visible{opacity:1}
+
+/* Música */
+.music-btn{
+  position:fixed;bottom:22px;right:22px;width:52px;height:52px;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,255,255,.9);border-radius:50%;font-size:1.4rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(155,127,212,.25);transition:transform .25s ease;z-index:100;
+  animation:pulseBtn 2.5s ease-in-out infinite;
+}
+@keyframes pulseBtn{0%,100%{box-shadow:0 4px 20px rgba(155,127,212,.25)}50%{box-shadow:0 4px 30px rgba(155,127,212,.5)}}
+.music-btn:hover{transform:scale(1.12)}
+
+/* Destellos */
+.sparkle{position:fixed;pointer-events:none;z-index:200;font-size:20px;animation:sparkleAnim .8s ease forwards}
+@keyframes sparkleAnim{0%{opacity:1;transform:scale(.5) translateY(0)}100%{opacity:0;transform:scale(1.5) translateY(-55px)}}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Cursor personalizado -->
+<div id="cursor">🌷</div>
+<div id="cursor-trail"></div>
+
+<!-- Canvas de pétalos (transición) -->
+<canvas id="petalCanvas"></canvas>
+
+<!-- ══════════════════════════════════════
+     PANTALLA DE BIENVENIDA
+══════════════════════════════════════ -->
+<div id="welcomeScreen">
+  <div class="welcome-box">
+    <div class="welcome-tulips">
+      <svg class="w-tulip" width="30" height="52" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ff6b9d"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+      <svg class="w-tulip" width="30" height="52" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ffe066"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+      <svg class="w-tulip" width="36" height="60" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#b44fe8"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+      <svg class="w-tulip" width="30" height="52" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#6aaee8"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+      <svg class="w-tulip" width="30" height="52" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ffb347"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+    </div>
+    <h1>Hola, <em>¿cuál es tu nombre?</em> 🌷</h1>
+    <p>Esta página fue hecha especialmente para ti.<br>Escribe tu nombre y descúbrela 💖</p>
+    <div class="welcome-input-wrap">
+      <input class="welcome-input" id="nameInput" type="text" placeholder="Escribe tu nombre aquí..." maxlength="24" autocomplete="off">
+    </div>
+    <button class="welcome-btn" id="enterBtn">¡Entrar! ✨</button>
+    <div class="petal-loader"><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CONTENIDO PRINCIPAL
+══════════════════════════════════════ -->
+<div id="mainContent">
+  <div id="particles"></div>
+
+  <!-- Tulipanes fondo -->
+  <svg class="tulip-float" style="width:85px;top:7%;left:2%;animation-duration:5s" viewBox="0 0 60 100" fill="none"><path d="M30 95 Q28 70 26 55 Q18 48 10 30 Q20 32 28 44 Q28 32 22 12 Q32 22 32 42 Q38 30 36 10 Q44 26 38 46 Q46 36 52 28 Q50 48 38 56 Q34 70 32 95Z" fill="#d5c0f0"/><rect x="28" y="55" width="4" height="40" rx="2" fill="#a8d5a2"/></svg>
+  <svg class="tulip-float" style="width:65px;top:28%;right:3%;animation-duration:6.5s;animation-delay:1s" viewBox="0 0 60 100" fill="none"><path d="M30 95 Q28 70 26 55 Q18 48 10 30 Q20 32 28 44 Q28 32 22 12 Q32 22 32 42 Q38 30 36 10 Q44 26 38 46 Q46 36 52 28 Q50 48 38 56 Q34 70 32 95Z" fill="#f9c6d0"/><rect x="28" y="55" width="4" height="40" rx="2" fill="#a8d5a2"/></svg>
+  <svg class="tulip-float" style="width:58px;bottom:20%;left:5%;animation-duration:7s;animation-delay:2s" viewBox="0 0 60 100" fill="none"><path d="M30 95 Q28 70 26 55 Q18 48 10 30 Q20 32 28 44 Q28 32 22 12 Q32 22 32 42 Q38 30 36 10 Q44 26 38 46 Q46 36 52 28 Q50 48 38 56 Q34 70 32 95Z" fill="#ffe066"/><rect x="28" y="55" width="4" height="40" rx="2" fill="#a8d5a2"/></svg>
+  <svg class="tulip-float" style="width:72px;bottom:30%;right:2%;animation-duration:5.5s;animation-delay:.5s" viewBox="0 0 60 100" fill="none"><path d="M30 95 Q28 70 26 55 Q18 48 10 30 Q20 32 28 44 Q28 32 22 12 Q32 22 32 42 Q38 30 36 10 Q44 26 38 46 Q46 36 52 28 Q50 48 38 56 Q34 70 32 95Z" fill="#b8d8f8"/><rect x="28" y="55" width="4" height="40" rx="2" fill="#a8d5a2"/></svg>
+  <svg class="tulip-float" style="width:50px;top:60%;left:1%;animation-duration:8s;animation-delay:3s" viewBox="0 0 60 100" fill="none"><path d="M30 95 Q28 70 26 55 Q18 48 10 30 Q20 32 28 44 Q28 32 22 12 Q32 22 32 42 Q38 30 36 10 Q44 26 38 46 Q46 36 52 28 Q50 48 38 56 Q34 70 32 95Z" fill="#ffb347"/><rect x="28" y="55" width="4" height="40" rx="2" fill="#a8d5a2"/></svg>
+
+  <div class="wrapper">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-tag">✨ Una dedicatoria especial ✨</div>
+      <h1>Para mi mejor<br><em>amiga,</em> <span class="name-highlight" id="heroName">tú</span> 💖</h1>
+      <p class="hero-sub">Hay personas que llegan a tu vida y la convierten en algo mucho más bonito. Tú eres una de ellas.</p>
+      <div class="center-tulip">
+        <svg width="110" height="168" viewBox="0 0 80 130" fill="none">
+          <path d="M40 130 Q39 100 38 78" stroke="#90c67c" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M38 95 Q24 88 20 76 Q32 78 38 90Z" fill="#a8d5a2"/>
+          <path d="M39 85 Q54 80 58 68 Q46 72 40 83Z" fill="#90c67c"/>
+          <path d="M38 78 Q22 65 18 44 Q30 50 36 66 Q30 44 24 20 Q38 32 38 56Z" fill="#ff6b9d"/>
+          <path d="M42 78 Q58 65 62 44 Q50 50 44 66 Q50 44 56 20 Q42 32 42 56Z" fill="#b44fe8"/>
+          <path d="M40 78 Q34 60 36 38 Q40 28 44 38 Q46 60 40 78Z" fill="#f9c6d0"/>
+          <path d="M38 75 Q28 58 30 40 Q36 44 38 62Z" fill="#f2a0b8" opacity=".8"/>
+          <path d="M42 75 Q52 58 50 40 Q44 44 42 62Z" fill="#c97ab2" opacity=".8"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- CARTA -->
+    <div class="card-letter">
+      <p>Hola, <strong id="letterName">amiga</strong> 🌷</p>
+      <p>Hay cosas que no siempre se dicen en voz alta, pero que se sienten todos los días. Tener a alguien como tú en mi vida es uno de esos regalos que no se buscan — simplemente aparecen, y luego ya no puedes imaginar el mundo sin esa persona.</p>
+      <p>Gracias por las risas eternas, los secretos guardados, los mensajes a deshoras y por estar cuando más importa. No sé qué haría sin tu locura ni sin tu calma. Eres de las pocas personas que me conocen de verdad y me quieren igual.</p>
+      <p>Esto es solo para recordarte lo mucho que significas para mí. 🌸</p>
+      <div class="firma">Con todo mi cariño 💜</div>
+    </div>
+
+    <!-- CONTADOR DE AMISTAD -->
+    <div class="counter-card reveal">
+      <div class="counter-title">⏳ Nuestra amistad tiene...</div>
+      <div class="counter-boxes" id="counterBoxes">
+        <div class="counter-box"><span class="num" id="cYears">0</span><span class="lbl">años</span></div>
+        <div class="counter-box"><span class="num" id="cMonths">0</span><span class="lbl">meses</span></div>
+        <div class="counter-box"><span class="num" id="cDays">0</span><span class="lbl">días</span></div>
+        <div class="counter-box"><span class="num" id="cHours">0</span><span class="lbl">horas</span></div>
+      </div>
+      <div class="counter-date-wrap">
+        <input type="date" class="counter-date-input" id="friendDate" title="¿Cuándo se conocieron?">
+        <button class="counter-btn" onclick="calcFriendship()">💜 Calcular</button>
+      </div>
+    </div>
+
+    <!-- JUEGO DE MEMORIA -->
+    <div class="memory-section">
+      <h2 class="section-title">🎮 Juego de memoria 🌷</h2>
+      <p class="section-sub reveal">Encuentra los pares de tulipanes — ¡cada acierto es una razón para sonreír! 😊</p>
+      <div class="memory-stats">
+        <span>🌷 Intentos: <b id="memMoves">0</b></span>
+        <span>✨ Pares: <b id="memPairs">0</b>/8</span>
+      </div>
+      <div class="memory-grid" id="memoryGrid"></div>
+      <div style="text-align:center;margin-bottom:12px">
+        <button class="ctrl-btn" onclick="initMemory()">🔀 Nuevo juego</button>
+      </div>
+      <div class="memory-win" id="memoryWin">
+        <span style="font-size:2.5rem">🎉</span>
+        <h3>¡Genial, <span id="winName">amiga</span>! 💖</h3>
+        <p id="memWinMsg">¡Lo lograste! Igual que nuestra amistad — con paciencia y cariño siempre encontramos el par perfecto. 🌷</p>
+      </div>
+    </div>
+
+    <!-- PUZZLE -->
+    <div class="puzzle-section">
+      <h2 class="section-title">🌷 Rompecabezas de amistad 🌷</h2>
+      <p class="section-sub reveal">Sube una foto especial y ¡reármala pieza a pieza! 💖</p>
+      <div class="puzzle-tulip-row">
+        <svg width="28" height="46" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ff6b9d"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+        <svg width="28" height="46" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ffe066"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+        <svg width="28" height="46" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#b44fe8"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+        <svg width="28" height="46" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#6aaee8"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+        <svg width="28" height="46" viewBox="0 0 40 65" fill="none"><path d="M20 62 Q19 48 18 37 Q12 32 7 20 Q14 22 18 30 Q18 22 14 8 Q21 14 21 28 Q25 20 24 7 Q30 17 26 31 Q31 24 35 19 Q33 32 25 37 Q22 47 21 62Z" fill="#ffb347"/><rect x="18" y="36" width="3" height="26" rx="1.5" fill="#7dd87a"/></svg>
+      </div>
+      <div class="upload-zone reveal" id="uploadZone">
+        <input type="file" accept="image/*" id="imgInput">
+        <span class="upload-icon">🖼️</span>
+        <p>Toca para subir una foto especial</p>
+        <small>JPG, PNG, GIF · cualquier tamaño</small>
+      </div>
+      <div class="puzzle-preview-wrap" id="previewWrap">
+        <img id="previewThumb" src="" alt="preview">
+        <span>Imagen lista 🎉 · Elige el nivel y ¡a jugar!</span>
+      </div>
+      <div class="puzzle-controls" id="puzzleControls" style="display:none">
+        <button class="ctrl-btn active" data-grid="3" onclick="setGrid(3,this)">🌸 3×3 Fácil</button>
+        <button class="ctrl-btn" data-grid="4" onclick="setGrid(4,this)">🌷 4×4 Medio</button>
+        <button class="ctrl-btn" data-grid="5" onclick="setGrid(5,this)">💫 5×5 Difícil</button>
+        <button class="ctrl-btn" style="background:linear-gradient(135deg,#ff6b9d,#b44fe8);color:#fff;border-color:transparent" onclick="shufflePuzzle()">🔀 Mezclar</button>
+        <button class="ctrl-btn" style="background:linear-gradient(135deg,#7dd87a,#6aaee8);color:#fff;border-color:transparent" onclick="solvePuzzle()">👁️ Ver imagen</button>
+      </div>
+      <div class="puzzle-progress" id="puzzleProgress"><div class="puzzle-progress-bar" id="puzzleProgressBar"></div></div>
+      <div class="puzzle-wrapper" id="puzzleWrapper" style="display:none"><canvas id="puzzleCanvas"></canvas></div>
+      <div class="puzzle-solved" id="puzzleSolved">
+        <span class="big-emoji">🎉</span>
+        <h3>¡Lo armaste, <span id="solvedName">amiga</span>! 💖</h3>
+        <p>¡Igual que nuestra amistad: un montón de piezas que juntas forman algo hermoso! 🌷✨</p>
+      </div>
+    </div>
+
+    <!-- FRASES -->
+    <h2 class="section-title">Razones para quererte 🌸</h2>
+    <div class="phrases-grid">
+      <div class="phrase-card reveal"><span class="emoji">🤣</span><div class="label">Las risas</div><p>Contigo hasta los momentos más tontos se convierten en recuerdos que guardo con una sonrisa enorme.</p></div>
+      <div class="phrase-card reveal" style="transition-delay:.1s"><span class="emoji">🤝</span><div class="label">La confianza</div><p>Sé que lo que te digo se queda contigo. Eso no tiene precio. Eres de esas personas raras y valiosas.</p></div>
+      <div class="phrase-card reveal" style="transition-delay:.2s"><span class="emoji">☕</span><div class="label">Las conversaciones</div><p>Podemos hablar de todo y de nada durante horas. Siempre termino sintiéndome mejor después de hablar contigo.</p></div>
+      <div class="phrase-card reveal" style="transition-delay:.3s"><span class="emoji">🌟</span><div class="label">Tu energía</div><p>Tienes una manera especial de ver la vida que me contagia. Me inspiras más de lo que crees.</p></div>
+    </div>
+
+    <!-- SORPRESA -->
+    <div class="surprise-section reveal">
+      <p style="margin-bottom:18px;color:var(--text-soft);font-size:.95rem">¿Lista para algo especial? 👇</p>
+      <button class="btn-surprise" id="surpriseBtn">✨ Toca aquí, hay una sorpresa ✨</button>
+      <div class="surprise-msg" id="surpriseMsg">
+        <span class="big-emoji" id="surpriseEmoji">🌷</span>
+        <h3 id="surpriseTitle">¡Eres increíble!</h3>
+        <p id="surpriseText">El mundo es mucho más bonito contigo en él. 💖</p>
+      </div>
+    </div>
+
+    <footer class="footer reveal">hecho con 💜 especialmente para ti · siempre 🌸</footer>
+  </div>
+</div>
+
+<button class="music-btn" id="musicBtn" title="Activar música">🎵</button>
+
+<script>
+/* ══════════════════════════════════════
+   CURSOR PERSONALIZADO
+══════════════════════════════════════ */
+const cur=document.getElementById('cursor');
+const curTrail=document.getElementById('cursor-trail');
+let mx=0,my=0,tx=0,ty=0;
+const cursors=['🌷','💖','✨','🌸','💫'];
+let curIdx=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+setInterval(()=>{
+  tx+=(mx-tx)*.15; ty+=(my-ty)*.15;
+  curTrail.style.left=tx+'px'; curTrail.style.top=ty+'px';
+},16);
+document.addEventListener('click',()=>{
+  curIdx=(curIdx+1)%cursors.length;
+  cur.textContent=cursors[curIdx];
+});
+// En móvil, ocultar cursor
+if('ontouchstart' in window){cur.style.display='none';curTrail.style.display='none';}
+
+/* ══════════════════════════════════════
+   PANTALLA BIENVENIDA & NOMBRE
+══════════════════════════════════════ */
+let friendName='amiga';
+
+function enterPage(){
+  const val=document.getElementById('nameInput').value.trim();
+  friendName=val||'amiga';
+  applyName();
+  launchPetals(()=>{
+    document.getElementById('welcomeScreen').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+    initParticles();
+    initMemory();
+    loadDefaultPuzzle();
+  });
+}
+
+function applyName(){
+  document.getElementById('heroName').textContent=friendName;
+  document.getElementById('letterName').textContent=friendName;
+  document.getElementById('winName').textContent=friendName;
+  document.getElementById('solvedName').textContent=friendName;
+}
+
+document.getElementById('enterBtn').addEventListener('click',enterPage);
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')enterPage();});
+
+/* ══════════════════════════════════════
+   PÉTALOS TRANSICIÓN
+══════════════════════════════════════ */
+function launchPetals(cb){
+  const pc=document.getElementById('petalCanvas');
+  pc.style.display='block';
+  pc.width=window.innerWidth; pc.height=window.innerHeight;
+  const c=pc.getContext('2d');
+  const petals=[];
+  const colors=['#ff6b9d','#b44fe8','#ffe066','#6aaee8','#ffb347','#7dd87a','#f9c6d0'];
+  for(let i=0;i<80;i++){
+    petals.push({
+      x:Math.random()*pc.width,
+      y:-20-Math.random()*200,
+      r:4+Math.random()*8,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-.5)*3,
+      vy:3+Math.random()*4,
+      rot:Math.random()*Math.PI*2,
+      vrot:(Math.random()-.5)*.15,
+      alpha:1
+    });
+  }
+  let frame=0;
+  function animate(){
+    c.clearRect(0,0,pc.width,pc.height);
+    frame++;
+    petals.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vrot;
+      if(frame>40) p.alpha-=.015;
+      c.save(); c.globalAlpha=Math.max(0,p.alpha);
+      c.translate(p.x,p.y); c.rotate(p.rot);
+      c.beginPath();
+      c.ellipse(0,0,p.r,p.r*.6,0,0,Math.PI*2);
+      c.fillStyle=p.color; c.fill();
+      c.restore();
+    });
+    if(frame<90) requestAnimationFrame(animate);
+    else{ pc.style.display='none'; if(cb) cb(); }
+  }
+  animate();
+}
+
+/* ══════════════════════════════════════
+   PARTÍCULAS
+══════════════════════════════════════ */
+function initParticles(){
+  const cont=document.getElementById('particles');
+  const syms=['💗','💕','✨','🌸','💫','🌷','💖','🎀','⭐'];
+  for(let i=0;i<24;i++){
+    const el=document.createElement('span');
+    el.className='heart-particle';
+    el.textContent=syms[Math.floor(Math.random()*syms.length)];
+    el.style.left=Math.random()*100+'vw';
+    el.style.fontSize=(9+Math.random()*13)+'px';
+    el.style.animationDuration=(7+Math.random()*13)+'s';
+    el.style.animationDelay=(Math.random()*16)+'s';
+    cont.appendChild(el);
+  }
+}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.12});
+function observeReveal(){
+  document.querySelectorAll('.reveal,.section-title,.section-sub,.surprise-section,.footer').forEach(el=>io.observe(el));
+}
+setTimeout(observeReveal,500);
+
+/* ══════════════════════════════════════
+   DESTELLOS
+══════════════════════════════════════ */
+function spawnSparkles(x,y,n=7){
+  const s=['✨','💫','🌸','💖','🌷','⭐','🎉'];
+  for(let i=0;i<n;i++){
+    const sp=document.createElement('span');
+    sp.className='sparkle';
+    sp.textContent=s[Math.floor(Math.random()*s.length)];
+    sp.style.left=(x+(Math.random()-.5)*90)+'px';
+    sp.style.top=(y+(Math.random()-.5)*90)+'px';
+    document.body.appendChild(sp);
+    setTimeout(()=>sp.remove(),950);
+  }
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('.phrase-card')) spawnSparkles(e.clientX,e.clientY);
+});
+
+/* ══════════════════════════════════════
+   CONTADOR DE AMISTAD
+══════════════════════════════════════ */
+function calcFriendship(){
+  const val=document.getElementById('friendDate').value;
+  if(!val){alert('Elige una fecha 🌷');return;}
+  const start=new Date(val);
+  const now=new Date();
+  if(start>now){alert('La fecha debe ser en el pasado 😅');return;}
+  const diff=now-start;
+  const totalDays=Math.floor(diff/86400000);
+  const years=Math.floor(totalDays/365);
+  const months=Math.floor((totalDays%365)/30);
+  const days=totalDays%30;
+  const hours=Math.floor((diff%86400000)/3600000);
+  animCount('cYears',years);
+  animCount('cMonths',months);
+  animCount('cDays',days);
+  animCount('cHours',hours);
+}
+
+function animCount(id,target){
+  const el=document.getElementById(id);
+  let cur=0;
+  const step=Math.max(1,Math.floor(target/30));
+  const t=setInterval(()=>{
+    cur=Math.min(cur+step,target);
+    el.textContent=cur;
+    if(cur>=target)clearInterval(t);
+  },40);
+}
+
+/* ══════════════════════════════════════
+   JUEGO DE MEMORIA
+══════════════════════════════════════ */
+const memSymbols=['🌷','🌸','💖','✨','🦋','🌺','💜','🌈'];
+let memCards=[],memFlipped=[],memMatched=0,memMoves=0,memLocked=false;
+
+function initMemory(){
+  memFlipped=[];memMatched=0;memMoves=0;memLocked=false;
+  document.getElementById('memMoves').textContent=0;
+  document.getElementById('memPairs').textContent='0';
+  document.getElementById('memoryWin').classList.remove('show');
+  const pairs=[...memSymbols,...memSymbols];
+  memCards=pairs.sort(()=>Math.random()-.5).map((sym,i)=>({id:i,sym,flipped:false,matched:false}));
+  renderMemory();
+}
+
+function renderMemory(){
+  const g=document.getElementById('memoryGrid');
+  g.innerHTML='';
+  memCards.forEach((card,i)=>{
+    const div=document.createElement('div');
+    div.className='mem-card'+(card.flipped||card.matched?' flipped':'')+(card.matched?' matched':'');
+    div.innerHTML=`<div class="mem-front"></div><div class="mem-back">${card.sym}</div>`;
+    div.addEventListener('click',()=>flipCard(i));
+    g.appendChild(div);
+  });
+}
+
+function flipCard(i){
+  const card=memCards[i];
+  if(memLocked||card.flipped||card.matched) return;
+  card.flipped=true;
+  memFlipped.push(i);
+  renderMemory();
+  if(memFlipped.length===2){
+    memLocked=true;
+    memMoves++;
+    document.getElementById('memMoves').textContent=memMoves;
+    const [a,b]=memFlipped;
+    if(memCards[a].sym===memCards[b].sym){
+      memCards[a].matched=memCards[b].matched=true;
+      memMatched++;
+      document.getElementById('memPairs').textContent=memMatched;
+      memFlipped=[];memLocked=false;
+      renderMemory();
+      spawnSparkles(window.innerWidth/2,window.innerHeight/2,5);
+      if(memMatched===8) setTimeout(showMemWin,400);
+    } else {
+      setTimeout(()=>{
+        memCards[a].flipped=memCards[b].flipped=false;
+        memFlipped=[];memLocked=false;
+        renderMemory();
+      },900);
+    }
+  }
+}
+
+function showMemWin(){
+  const msgs=[
+    `¡Lo lograste en ${memMoves} intentos! Igual que nuestra amistad — con paciencia y cariño siempre encontramos el par perfecto. 🌷`,
+    `¡Impresionante, ${friendName}! ${memMoves} intentos y lo conseguiste. ¡Eres brillante! ✨`,
+    `¡Ganaste! Con ${memMoves} intentos encontraste todos los pares. ¡Así de especial eres! 💜`,
+  ];
+  document.getElementById('memWinMsg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  const w=document.getElementById('memoryWin');
+  w.classList.remove('show'); void w.offsetWidth; w.classList.add('show');
+  for(let i=0;i<6;i++) setTimeout(()=>spawnSparkles(Math.random()*window.innerWidth,Math.random()*window.innerHeight*.5,6),i*180);
+}
+
+/* ══════════════════════════════════════
+   SORPRESA
+══════════════════════════════════════ */
+const surpriseMsgs=[
+  {emoji:'🌷',title:'¡Eres increíble!',text:`El mundo es mucho más bonito contigo en él, ${friendName}. Gracias por ser exactamente como eres — sin filtros, solo tú. Eso es lo más bonito de todo. 💖`},
+  {emoji:'🌟',title:'Una cosa más...',text:`¿Sabes lo raro que es encontrar a alguien que te acepta de verdad, que te hace reír y que está ahí cuando importa? Tú eres esa persona para mí. 🥹`},
+  {emoji:'💜',title:'Para siempre',text:`No importa el tiempo ni la distancia. Contigo siempre siento que estamos cerca. Eso es lo que tiene la amistad verdadera. Para siempre. ✨`},
+  {emoji:'🎀',title:'Solo quería decirte...',text:`Oye, ${friendName}... solo quería que supieras que pienso en ti con mucho cariño. Me alegra tanto tenerte. 🌸`},
+];
+let msgIdx=0;
+document.getElementById('surpriseBtn').addEventListener('click',function(e){
+  const msg=surpriseMsgs[msgIdx%surpriseMsgs.length]; msgIdx++;
+  const box=document.getElementById('surpriseMsg');
+  document.getElementById('surpriseEmoji').textContent=msg.emoji;
+  document.getElementById('surpriseTitle').textContent=msg.title;
+  document.getElementById('surpriseText').textContent=msg.text;
+  box.classList.remove('show'); void box.offsetWidth; box.classList.add('show');
+  spawnSparkles(e.clientX,e.clientY,10);
+});
+
+/* ══════════════════════════════════════
+   PUZZLE — grilla fija, intercambio por toque
+   • Sin bordes, imagen nítida pixel-perfect
+   • Toca pieza A → resalta; toca pieza B → intercambian
+══════════════════════════════════════ */
+const canvas = document.getElementById('puzzleCanvas');
+const ctx    = canvas.getContext('2d', { alpha: false });
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = 'high';
+
+let srcImage   = null;
+let gridSize   = 3;
+/* grid[r][c] = id de la pieza que ocupa esa celda.
+   El id original es row_orig*gridSize + col_orig */
+let grid       = [];
+let pW = 0, pH = 0;          // tamaño real de cada pieza en px (canvas)
+let selectedCell = null;     // {r,c} de la pieza seleccionada, o null
+let solvedCount  = 0;
+let totalPieces  = 0;
+/* animación de swap */
+let swapAnim   = null;       // {cells, t, from, to}
+
+/* ── imagen default ── */
+function buildDefaultImage(){
+  const off=document.createElement('canvas');
+  off.width=600;off.height=600;
+  const c=off.getContext('2d');
+  const bg=c.createLinearGradient(0,0,600,600);
+  bg.addColorStop(0,'#fce4ec');bg.addColorStop(.4,'#e8d5f5');bg.addColorStop(.7,'#d4eaf7');bg.addColorStop(1,'#fffde7');
+  c.fillStyle=bg;c.fillRect(0,0,600,600);
+  // Sol
+  const sg=c.createRadialGradient(490,90,10,490,90,70);
+  sg.addColorStop(0,'#ffe066');sg.addColorStop(1,'#ffb347');
+  c.beginPath();c.arc(490,90,70,0,Math.PI*2);c.fillStyle=sg;c.fill();
+  // Rayos
+  c.strokeStyle='rgba(255,200,50,.4)';c.lineWidth=3;
+  for(let a=0;a<12;a++){const ang=a*(Math.PI/6);c.beginPath();c.moveTo(490+75*Math.cos(ang),90+75*Math.sin(ang));c.lineTo(490+110*Math.cos(ang),90+110*Math.sin(ang));c.stroke();}
+  // Nubes
+  function cloud(cx,cy,r){c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.arc(cx+r*.9,cy-r*.35,r*.8,0,Math.PI*2);c.arc(cx+r*1.7,cy,r*.7,0,Math.PI*2);c.fillStyle='rgba(255,255,255,.75)';c.fill();}
+  cloud(70,80,36);cloud(230,55,28);cloud(340,100,22);
+  // Cielo
+  const sk=c.createLinearGradient(0,0,0,380);sk.addColorStop(0,'rgba(180,220,255,.15)');sk.addColorStop(1,'rgba(180,220,255,0)');
+  c.fillStyle=sk;c.fillRect(0,0,600,380);
+  // Hierba base
+  c.fillStyle='#b5e5a0';c.fillRect(0,400,600,200);
+  c.fillStyle='#8fd47a';c.fillRect(0,430,600,170);
+  c.fillStyle='#7ac464';c.fillRect(0,460,600,140);
+  // Ondas de hierba
+  c.strokeStyle='#6aaa54';c.lineWidth=2;
+  for(let x=0;x<600;x+=18){c.beginPath();c.moveTo(x,400);c.quadraticCurveTo(x+9,390,x+18,400);c.stroke();}
+  // Tulipanes
+  const tCol=[['#ff6b9d','#ffa0c0','#f2a0b8'],['#b44fe8','#d580ff','#d5a0f0'],['#ffe066','#fff0a0','#ffd000'],
+              ['#6aaee8','#a0d0ff','#b8d8f8'],['#ffb347','#ffd080','#ffd580'],['#ff6b9d','#e080c0','#c97ab2'],
+              ['#7dd87a','#b0f0a0','#a8d5a2'],['#b44fe8','#e080ff','#ff6b9d'],['#6aaee8','#80c8ff','#ffe066']];
+  const tPos=[40,95,155,215,265,315,370,425,485,540];
+  tPos.forEach((x,i)=>{
+    const sc=.85+Math.random()*.45;
+    const yBase=415+Math.random()*15;
+    c.save();c.translate(x,yBase);c.scale(sc,sc);
+    const [c1,c2,c3]=tCol[i%tCol.length];
+    // tallo
+    c.strokeStyle='#4a7a3a';c.lineWidth=5;c.lineCap='round';
+    c.beginPath();c.moveTo(0,0);c.bezierCurveTo(-6,-35,6,-70,0,-95);c.stroke();
+    // hoja
+    c.fillStyle='#6aaa54';
+    c.beginPath();c.moveTo(0,-45);c.bezierCurveTo(-28,-60,-34,-38,-12,-42);c.closePath();c.fill();
+    c.fillStyle='#8fd47a';
+    c.beginPath();c.moveTo(0,-55);c.bezierCurveTo(26,-68,30,-46,10,-50);c.closePath();c.fill();
+    // pétalos exteriores
+    c.fillStyle=c1;
+    [[-18,-95,10,50],[18,-95,-10,50],[0,-108,0,42]].forEach(([dx,dy,bx,by])=>{
+      c.beginPath();c.moveTo(0,-95);c.bezierCurveTo(dx+bx,dy+by,dx+bx,dy+by+25,0,-72);c.closePath();c.fill();
+    });
+    // pétalo interior brillante
+    c.fillStyle=c2;
+    c.beginPath();c.ellipse(0,-86,9,16,0,0,Math.PI*2);c.fill();
+    // centro
+    c.fillStyle=c3;
+    c.beginPath();c.ellipse(0,-86,4,6,0,0,Math.PI*2);c.fill();
+    c.restore();
+  });
+  // Mariposas
+  [[130,200,'#ff6b9d'],[300,160,'#b44fe8'],[420,220,'#ffe066'],[520,280,'#6aaee8']].forEach(([bx,by,col])=>{
+    c.save();c.translate(bx,by);c.fillStyle=col;c.globalAlpha=.8;
+    c.beginPath();c.ellipse(-10,-5,13,7,-.4,0,Math.PI*2);c.fill();
+    c.beginPath();c.ellipse(10,-5,13,7,.4,0,Math.PI*2);c.fill();
+    c.fillStyle='#333';c.globalAlpha=1;
+    c.beginPath();c.ellipse(0,-5,2,6,0,0,Math.PI*2);c.fill();
+    c.restore();
+  });
+  // Texto decorativo pequeño
+  c.font='bold 18px Nunito,sans-serif';
+  c.fillStyle='rgba(90,61,92,.25)';
+  c.textAlign='center';
+  c.fillText('🌷 nuestra amistad 🌷',300,580);
+  const img=new Image();img.src=off.toDataURL();return img;
+}
+
+/* ── inicializar puzzle ── */
+function initPuzzle(img){
+  srcImage=img;
+  document.getElementById('puzzleSolved').classList.remove('show');
+  selectedCell=null; swapAnim=null;
+  totalPieces=gridSize*gridSize;
+
+  /* Canvas cuadrado que ocupa 100% del wrapper, máx 660 */
+  const sz=Math.min(660,window.innerWidth-40);
+  canvas.width=sz; canvas.height=sz;
+  pW=sz/gridSize; pH=sz/gridSize;
+
+  /* grilla inicial: grid[r][c] = id original */
+  grid=[];
+  for(let r=0;r<gridSize;r++){
+    grid[r]=[];
+    for(let c=0;c<gridSize;c++) grid[r][c]=r*gridSize+c;
+  }
+
+  document.getElementById('puzzleWrapper').style.display='block';
+  document.getElementById('puzzleControls').style.display='flex';
+  document.getElementById('puzzleProgress').classList.add('show');
+
+  shufflePuzzle();
+}
+
+/* ── mezclar (Fisher-Yates sobre la grilla) ── */
+function shufflePuzzle(){
+  document.getElementById('puzzleSolved').classList.remove('show');
+  selectedCell=null; swapAnim=null;
+  const flat=[];
+  for(let r=0;r<gridSize;r++) for(let c=0;c<gridSize;c++) flat.push(grid[r][c]);
+  for(let i=flat.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [flat[i],flat[j]]=[flat[j],flat[i]];
+  }
+  let k=0;
+  for(let r=0;r<gridSize;r++) for(let c=0;c<gridSize;c++) grid[r][c]=flat[k++];
+  solvedCount=countSolved(); updateProgress(); drawPuzzle();
+}
+
+/* ── resolver visualmente ── */
+function solvePuzzle(){
+  selectedCell=null; swapAnim=null;
+  for(let r=0;r<gridSize;r++) for(let c=0;c<gridSize;c++) grid[r][c]=r*gridSize+c;
+  solvedCount=totalPieces; updateProgress(); drawPuzzle();
+}
+
+function setGrid(n,btn){
+  gridSize=n;
+  document.querySelectorAll('.ctrl-btn[data-grid]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(srcImage) initPuzzle(srcImage);
+}
+
+function countSolved(){
+  let n=0;
+  for(let r=0;r<gridSize;r++) for(let c=0;c<gridSize;c++) if(grid[r][c]===r*gridSize+c) n++;
+  return n;
+}
+
+function updateProgress(){
+  document.getElementById('puzzleProgressBar').style.width=Math.round((solvedCount/totalPieces)*100)+'%';
+}
+
+/* ── dibujo principal ── */
+function drawPuzzle(){
+  if(!srcImage){drawPlaceholder();return;}
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const iw=srcImage.naturalWidth||srcImage.width;
+  const ih=srcImage.naturalHeight||srcImage.height;
+
+  /* Celdas animando (swap) */
+  const animCells= swapAnim ? new Set(swapAnim.cells.map(({r,c})=>r+','+c)) : new Set();
+
+  for(let r=0;r<gridSize;r++){
+    for(let c=0;c<gridSize;c++){
+      const key=r+','+c;
+      if(animCells.has(key)) continue;   // se dibuja aparte
+
+      const id    = grid[r][c];
+      const origR = Math.floor(id/gridSize);
+      const origC = id%gridSize;
+      const dx    = c*pW, dy=r*pH;
+
+      ctx.save();
+      ctx.beginPath(); ctx.rect(dx,dy,pW,pH); ctx.clip();
+      ctx.drawImage(srcImage, origC*(iw/gridSize), origR*(ih/gridSize),
+                    iw/gridSize, ih/gridSize, dx, dy, pW, pH);
+      ctx.restore();
+
+      /* resaltado de selección */
+      if(selectedCell && selectedCell.r===r && selectedCell.c===c){
+        ctx.save();
+        ctx.fillStyle='rgba(180,79,232,.22)';
+        ctx.fillRect(dx,dy,pW,pH);
+        /* borde de selección brillante */
+        ctx.strokeStyle='#b44fe8';
+        ctx.lineWidth=3.5;
+        ctx.shadowColor='#b44fe8'; ctx.shadowBlur=10;
+        ctx.strokeRect(dx+1.75,dy+1.75,pW-3.5,pH-3.5);
+        ctx.restore();
+      }
+
+      /* líneas de cuadrícula muy sutiles (1px semitransparente) */
+      ctx.save();
+      ctx.strokeStyle='rgba(255,255,255,.35)';
+      ctx.lineWidth=1;
+      ctx.strokeRect(dx+.5,dy+.5,pW-1,pH-1);
+      ctx.restore();
+    }
+  }
+
+  /* Piezas en animación de swap */
+  if(swapAnim){
+    const t=swapAnim.t; // 0..1
+    const ease=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; // easeInOut
+    swapAnim.cells.forEach(({r,c,fromX,fromY,toX,toY})=>{
+      const id    = grid[r][c];
+      const origR = Math.floor(id/gridSize);
+      const origC = id%gridSize;
+      const curX  = fromX+(toX-fromX)*ease;
+      const curY  = fromY+(toY-fromY)*ease;
+
+      ctx.save();
+      ctx.shadowColor='rgba(90,61,92,.3)'; ctx.shadowBlur=12; ctx.shadowOffsetY=4;
+      ctx.beginPath(); ctx.rect(curX,curY,pW,pH); ctx.clip();
+      ctx.drawImage(srcImage, origC*(iw/gridSize), origR*(ih/gridSize),
+                    iw/gridSize, ih/gridSize, curX, curY, pW, pH);
+      /* borde suave durante animación */
+      ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1;
+      ctx.strokeRect(curX+.5,curY+.5,pW-1,pH-1);
+      ctx.restore();
+    });
+  }
+}
+
+function drawPlaceholder(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='rgba(213,192,240,.25)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.font='60px serif'; ctx.textAlign='center';
+  ctx.fillText('🌷',canvas.width/2,canvas.height/2-14);
+  ctx.font=`bold ${Math.max(13,canvas.width*.025)}px Nunito,sans-serif`;
+  ctx.fillStyle='rgba(90,61,92,.45)';
+  ctx.fillText('Sube una foto para comenzar',canvas.width/2,canvas.height/2+42);
+}
+
+/* ── animación de swap ── */
+function animateSwap(r1,c1,r2,c2,onDone){
+  /* guardamos las posiciones destino ANTES de intercambiar grid */
+  const fromA={x:c1*pW,y:r1*pH};
+  const fromB={x:c2*pW,y:r2*pH};
+
+  /* intercambiar en la grilla */
+  const tmp=grid[r1][c1]; grid[r1][c1]=grid[r2][c2]; grid[r2][c2]=tmp;
+
+  swapAnim={
+    cells:[
+      {r:r1,c:c1, fromX:fromB.x,fromY:fromB.y, toX:fromA.x,toY:fromA.y},
+      {r:r2,c:c2, fromX:fromA.x,fromY:fromA.y, toX:fromB.x,toY:fromB.y},
+    ],
+    t:0
+  };
+  const dur=320; const start=performance.now();
+  function step(now){
+    swapAnim.t=Math.min((now-start)/dur,1);
+    drawPuzzle();
+    if(swapAnim.t<1) requestAnimationFrame(step);
+    else{ swapAnim=null; drawPuzzle(); onDone(); }
+  }
+  requestAnimationFrame(step);
+}
+
+/* ── toque / clic ── */
+function getCell(e){
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=canvas.width/rect.width, scaleY=canvas.height/rect.height;
+  const src=e.touches?e.touches[0]:e;
+  const x=(src.clientX-rect.left)*scaleX;
+  const y=(src.clientY-rect.top)*scaleY;
+  return{r:Math.floor(y/pH), c:Math.floor(x/pW)};
+}
+
+function handleTap(e){
+  if(!srcImage||swapAnim) return;
+  e.preventDefault();
+  const {r,c}=getCell(e);
+  if(r<0||r>=gridSize||c<0||c>=gridSize) return;
+
+  if(!selectedCell){
+    selectedCell={r,c}; drawPuzzle(); return;
+  }
+  const {r:r1,c:c1}=selectedCell;
+  selectedCell=null;
+
+  if(r1===r&&c1===c){ drawPuzzle(); return; } // misma pieza, deseleccionar
+
+  /* intercambiar con animación */
+  animateSwap(r1,c1,r,c,()=>{
+    solvedCount=countSolved(); updateProgress();
+    const rect=canvas.getBoundingClientRect();
+    spawnSparkles(rect.left+(c+.5)*pW*(rect.width/canvas.width),
+                  rect.top+(r+.5)*pH*(rect.height/canvas.height),4);
+    if(solvedCount===totalPieces) setTimeout(onPuzzleSolved,250);
+  });
+}
+
+canvas.addEventListener('mousedown', handleTap);
+canvas.addEventListener('touchstart', handleTap, {passive:false});
+
+function onPuzzleSolved(){
+  const box=document.getElementById('puzzleSolved');
+  box.classList.remove('show'); void box.offsetWidth; box.classList.add('show');
+  for(let i=0;i<6;i++) setTimeout(()=>spawnSparkles(Math.random()*window.innerWidth,Math.random()*window.innerHeight*.6,8),i*200);
+}
+
+/* ── upload ── */
+document.getElementById('imgInput').addEventListener('change',function(){
+  const file=this.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      document.getElementById('previewThumb').src=ev.target.result;
+      document.getElementById('previewWrap').classList.add('show');
+      document.getElementById('uploadZone').style.display='none';
+      initPuzzle(img);
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function loadDefaultPuzzle(){
+  const def=buildDefaultImage();
+  def.onload=()=>initPuzzle(def);
+  if(def.complete) initPuzzle(def);
+}
+
+/* ══════════════════════════════════════
+   MÚSICA
+══════════════════════════════════════ */
+let audioCtx=null,musicOn=false,gainNode=null,oscillators=[];
+function createMusic(){
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  gainNode=audioCtx.createGain();gainNode.gain.setValueAtTime(0,audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(.065,audioCtx.currentTime+1.5);gainNode.connect(audioCtx.destination);
+  const notes=[261.6,293.7,329.6,349.2,392,440,493.9,523.3];
+  const melody=[0,2,4,7,5,4,2,0,2,4,5,7,9,7,5,4,2,4,5,7,4,2,0];
+  const tempo=.42;
+  melody.forEach((ni,i)=>{
+    const freq=notes[ni%notes.length];const osc=audioCtx.createOscillator();const env=audioCtx.createGain();
+    osc.type='sine';osc.frequency.value=freq;
+    const st=audioCtx.currentTime+i*tempo;
+    env.gain.setValueAtTime(0,st);env.gain.linearRampToValueAtTime(1,st+.05);
+    env.gain.setValueAtTime(1,st+tempo*.6);env.gain.linearRampToValueAtTime(0,st+tempo*.95);
+    osc.connect(env);env.connect(gainNode);osc.start(st);osc.stop(st+tempo);oscillators.push(osc);
+  });
+  setTimeout(()=>{if(musicOn){oscillators=[];createMusic();}},melody.length*tempo*1000);
+}
+function stopMusic(){
+  if(gainNode){gainNode.gain.linearRampToValueAtTime(0,audioCtx.currentTime+.8);setTimeout(()=>{oscillators.forEach(o=>{try{o.stop()}catch(e){}});oscillators=[];},900);}
+}
+document.getElementById('musicBtn').addEventListener('click',function(){
+  musicOn=!musicOn;this.textContent=musicOn?'🔇':'🎵';
+  this.title=musicOn?'Silenciar':'Activar música';
+  musicOn?createMusic():stopMusic();
+});
+</script>
+</body>
+</html>
